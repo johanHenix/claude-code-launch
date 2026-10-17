@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- Redirige https://…/#<alias>[/<argument>] vers claude-code-jlo://<alias>[/<argument>].
+     Voir ~/.config/claude-code-url/README.md. Aucun script ni ressource externe : la CSP
+     n'autorise que le script et le style ci-dessous, identifiés par leur empreinte. -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2Ebt4bLljqVdtIzmybANcPsU5pUhm6v+yAOHQTryBgw='; style-src 'sha256-8s/LuWh7Hq9/c9r+VlHi7SnX/OLdDgORNFRjgagUwoM='; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Lancement Claude Code</title>
+<style>:root { color-scheme: light dark; --fond: #fafaf9; --texte: #1c1917; --discret: #78716c; }
+@media (prefers-color-scheme: dark) { :root { --fond: #1c1917; --texte: #f5f5f4; --discret: #a8a29e; } }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px;
+       box-sizing: border-box; background: var(--fond); color: var(--texte);
+       font: 16px/1.5 system-ui, sans-serif; text-align: center; }
+p { margin: 0 0 8px; }
+#secours { color: var(--discret); font-size: 14px; }
+a { color: inherit; word-break: break-all; }</style>
+</head>
+<body>
+<main>
+<p id="message">Lancement de Claude Code…</p>
+<p id="secours" hidden>Rien ne s'est ouvert ? <a id="lien" href="#">lien direct</a></p>
+</main>
+<script>(function () {
+  // Seule la partie après le # est lue : le navigateur ne l'envoie jamais au serveur.
+  var message = document.getElementById("message");
+  var cible;
+  try {
+    cible = decodeURIComponent(location.hash.slice(1));
+  } catch (e) {
+    cible = "";
+  }
+  // Un alias, suivi éventuellement d'un argument simple. Le vrai contrôle (liste blanche, motif
+  // de l'argument) reste dans le script passerelle, côté PC.
+  if (!/^[a-z0-9-]+(\/[A-Za-z0-9._-]+)?$/.test(cible)) {
+    message.textContent = "Lien invalide : rien à lancer.";
+    return;
+  }
+  // Redirection vers le seul protocole claude-code-jlo:// : cette page ne mène nulle part ailleurs.
+  var url = "claude-code-jlo://" + cible;
+  var lien = document.getElementById("lien");
+  lien.href = url;
+  lien.textContent = url;
+  document.getElementById("secours").hidden = false;
+  message.textContent = "Claude Code est lancé, tu peux fermer cet onglet.";
+  location.href = url;
+})();</script>
+</body>
+</html>
