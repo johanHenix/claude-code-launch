@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2Ebt4bLljqVdtIzmybANcPsU5pUhm6v+yAOHQTryBgw='; style-src 'sha256-8s/LuWh7Hq9/c9r+VlHi7SnX/OLdDgORNFRjgagUwoM='; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-UvoeaRVe5f4tKd84BwNsGzp+IgFLSsUyN34OuzY/N5Y='; style-src 'sha256-8s/LuWh7Hq9/c9r+VlHi7SnX/OLdDgORNFRjgagUwoM='; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
 <title>Lancement Claude Code</title>
@@ -46,6 +46,9 @@ a { color: inherit; word-break: break-all; }</style>
   lien.textContent = url;
   document.getElementById("secours").hidden = false;
   message.textContent = "Claude Code est lancé, tu peux fermer cet onglet.";
+  // Windows Terminal qui passe au premier plan retire le focus à la page : le lancement a abouti,
+  // l'onglet se ferme. Si le navigateur refuse window.close(), le message ci-dessus reste affiché.
+  window.addEventListener("blur", function () { window.close(); }, { once: true });
   location.href = url;
 })();</script>
 </body>
